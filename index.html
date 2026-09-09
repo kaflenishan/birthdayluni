@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Happy Birthday Miss Lunibha! ✨🎂</title>
+  <meta name="description" content="A cute, interactive, and personalized birthday celebration website for Miss Lunibha!">
+  <!-- Google Fonts: Fredoka & Caveat & Quicksand -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Fullscreen Particle / Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Ambient Floating Background Elements (Balloons, Hearts, Sparkles) -->
+  <div class="ambient-bg" id="ambient-bg" aria-hidden="true"></div>
+
+  <!-- Top Ambient Music Bar -->
+  <header class="top-bar">
+    <div class="badge-tag">✨ Birthday Special</div>
+    <div class="controls-group">
+      <button id="music-btn" class="icon-btn" aria-label="Toggle Music" title="Play cute music">
+        <span class="btn-icon">🎵</span>
+        <span class="btn-label">Music: Off</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Multi-Scene Interactive App Container -->
+  <main class="app-container">
+
+    <!-- SCENE 0: Cute Passcode Lock Panel (Code: 112009) -->
+    <section id="scene-passcode" class="scene active">
+      <div class="glass-card passcode-card">
+        <div class="pill-chip">🔒 Secret Birthday Access</div>
+        <h1 class="bounce-title">Enter Secret Code ✨</h1>
+        <p class="subtitle">Only Miss Lunibha has the magical birthday key!</p>
+
+        <div class="code-display-wrap">
+          <input type="password" id="passcode-input" class="passcode-input" maxlength="6" readonly placeholder="• • • • • •" />
+          <p id="passcode-error" class="error-text"></p>
+        </div>
+
+        <!-- Cute PIN Keypad -->
+        <div class="keypad-grid">
+          <button type="button" class="key-btn" data-key="1">1</button>
+          <button type="button" class="key-btn" data-key="2">2</button>
+          <button type="button" class="key-btn" data-key="3">3</button>
+          <button type="button" class="key-btn" data-key="4">4</button>
+          <button type="button" class="key-btn" data-key="5">5</button>
+          <button type="button" class="key-btn" data-key="6">6</button>
+          <button type="button" class="key-btn" data-key="7">7</button>
+          <button type="button" class="key-btn" data-key="8">8</button>
+          <button type="button" class="key-btn" data-key="9">9</button>
+          <button type="button" class="key-btn clear-btn" id="key-clear">C</button>
+          <button type="button" class="key-btn" data-key="0">0</button>
+          <button type="button" class="key-btn enter-btn" id="key-enter">💖</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCENE 0.5: Playful Question 1 (I have something to sayyyy) -->
+    <section id="scene-q1" class="scene">
+      <div class="glass-card question-card">
+        <div class="pill-chip">Surprise Alert 👀</div>
+        <div class="cute-big-emoji">🎁✨</div>
+        <h2 class="scene-heading">i have something... to sayyyy</h2>
+        <p class="scene-sub">Pick wisely, Miss! 🤭</p>
+
+        <div class="choice-buttons-group">
+          <button id="q1-yes-btn" class="cute-cta-btn pulse-glow">
+            <span>Yes 💖</span>
+          </button>
+          <button id="q1-no-btn" class="cute-secondary-btn no-btn">
+            <span>No 🙄</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCENE 0.6: Playful Question 2 (Really?) -->
+    <section id="scene-q2" class="scene">
+      <div class="glass-card question-card">
+        <div class="pill-chip">Are you sure? 🥺</div>
+        <div class="cute-big-emoji">🧐💖</div>
+        <h2 class="scene-heading">really? are you super sure?</h2>
+        <p class="scene-sub">No take-backs allowed! ✨</p>
+
+        <div class="choice-buttons-group">
+          <button id="q2-yes-btn" class="cute-cta-btn pulse-glow">
+            <span>Yes! 🥰</span>
+          </button>
+          <button id="q2-no-btn" class="cute-secondary-btn no-btn">
+            <span>No 😝</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCENE 0.7: Sassy "Yehh like u have a choice" Screen -->
+    <section id="scene-attitude" class="scene">
+      <div class="glass-card attitude-card">
+        <div class="attitude-emoji-wrap">
+          <span class="attitude-face">💅😏🙄</span>
+        </div>
+        <h2 class="attitude-title">Yehh like u have a choice</h2>
+        <p class="attitude-sub">You're seeing it anyway! Taking you there now... 💖</p>
+        <div class="loading-dots">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCENE 1: Surprise Gift Box -->
+    <section id="scene-gift" class="scene">
+      <div class="glass-card gift-intro-card">
+        <div class="pill-chip">Special Delivery for Miss Lunibha 💌</div>
+        <h1 class="bounce-title">Here is your birthday surprise!</h1>
+        <p class="subtitle">Tap the gift box below to unwrap the magic ✨</p>
+
+        <div class="gift-wrapper" id="gift-box" role="button" tabindex="0" aria-label="Open Gift Box">
+          <div class="sparkles-cluster">
+            <span class="sparkle s1">✨</span>
+            <span class="sparkle s2">💖</span>
+            <span class="sparkle s3">⭐</span>
+            <span class="sparkle s4">🌸</span>
+          </div>
+          <div class="gift-box-visual">
+            <div class="gift-lid">
+              <div class="ribbon-bow">
+                <div class="bow-left"></div>
+                <div class="bow-right"></div>
+                <div class="bow-center"></div>
+              </div>
+              <div class="lid-strap"></div>
+            </div>
+            <div class="gift-body">
+              <div class="vertical-strap"></div>
+              <div class="gift-glow"></div>
+            </div>
+          </div>
+          <p class="tap-hint">👉 Tap to unwrap 🎁</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCENE 2: Interactive Birthday Cake & Make A Wish -->
+    <section id="scene-cake" class="scene">
+      <div class="glass-card cake-card">
+        <div class="pill-chip">Step 1 • Make a Wish ✨</div>
+        <h2 class="scene-heading">Happy Birthday, <span class="recipient-name">Miss</span>! 🎂</h2>
+        <p class="scene-sub">Make a special wish in your heart, then tap the candles to blow them out!</p>
+
+        <div class="cake-stage" id="cake-stage">
+          <!-- Multi-tier Cute Cake -->
+          <div class="cake-container">
+            <!-- Candles Row -->
+            <div class="candles-row" id="candles-group">
+              <div class="candle candle-hidden" data-candle="1">
+                <div class="flame"></div>
+                <div class="smoke"></div>
+                <div class="candle-wick"></div>
+                <div class="candle-stick c-pink"></div>
+              </div>
+              <div class="candle center-candle candle-hidden" data-candle="2">
+                <div class="flame"></div>
+                <div class="smoke"></div>
+                <div class="candle-wick"></div>
+                <div class="candle-stick c-yellow"></div>
+              </div>
+              <div class="candle candle-hidden" data-candle="3">
+                <div class="flame"></div>
+                <div class="smoke"></div>
+                <div class="candle-wick"></div>
+                <div class="candle-stick c-purple"></div>
+              </div>
+            </div>
+
+            <!-- Cake Top Tier -->
+            <div class="cake-tier tier-top tier-hidden">
+              <div class="frosting-drips">
+                <span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <div class="cake-decorations deco-hidden">
+                <span class="deco-berry">🍓</span>
+                <span class="deco-star">⭐</span>
+                <span class="deco-berry">🍓</span>
+              </div>
+            </div>
+
+            <!-- Cake Bottom Tier -->
+            <div class="cake-tier tier-bottom tier-hidden">
+              <div class="frosting-drips">
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <div class="cake-stripes"></div>
+            </div>
+
+            <!-- Cake Stand -->
+            <div class="cake-plate plate-hidden"></div>
+          </div>
+        </div>
+
+        <div class="action-buttons-group">
+          <button id="blow-candles-btn" class="cute-cta-btn pulse-glow btn-locked">
+            <span class="btn-emoji">💨</span>
+            <span>Blow Candles!</span>
+          </button>
+          <button id="skip-to-card-btn" class="cute-secondary-btn">
+            Read Your Birthday Card 💌
+          </button>
+        </div>
+
+        <p class="wish-status" id="wish-status-msg">Tap the flame or press the button above!</p>
+      </div>
+    </section>
+
+    <!-- SCENE 3: The Greeting Letter & Polaroid Memory Wall -->
+    <section id="scene-wishes" class="scene">
+      <div class="wishes-layout">
+        
+        <!-- Folded Romantic/Cute Letter Card -->
+        <div class="letter-card-wrapper">
+          <div class="letter-envelope" id="letter-card">
+            <div class="letter-header">
+              <div class="stamp-box">
+                <span class="stamp-icon">💌</span>
+                <span class="stamp-text">FOR YOU</span>
+              </div>
+              <div class="to-label">Dearest cool Birthday Girl,</div>
+            </div>
+
+            <div class="letter-body">
+              <p class="letter-text" id="display-letter">
+                Wishing you the sweetest, brightest, and most magical birthday ever! May your year ahead be packed with endless smiles, pure happiness, warm moments, and every dream in your heart coming true. Thank you for being such a wonderful, radiant presence in the world! 🌸✨
+              </p>
+              <div class="signature-line">
+                <p>penned down by,</p>
+                <h4 id="display-sender" class="sender-name">someone who remembers 💭</h4>
+              </div>
+            </div>
+
+            <div class="card-stickers">
+              <span class="sticker s-heart">💖</span>
+              <span class="sticker s-sparkle">✨</span>
+              <span class="sticker s-cupcake">🧁</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Polaroid Memories Gallery -->
+        <div class="polaroid-section">
+          <h3 class="polaroid-title">Sweet Moments & Memories 📸</h3>
+          <p class="polaroid-sub">Tap any photo to flip and reveal secret notes!</p>
+          
+          <div class="polaroid-deck" id="polaroid-deck">
+            <!-- Polaroid 1 - real photo -->
+            <div class="polaroid-card p1" tabindex="0" role="button" aria-label="Photo memory 1">
+              <div class="polaroid-pin">📌</div>
+              <div class="polaroid-inner">
+                <div class="polaroid-front">
+                  <div class="photo-frame photo-real">
+                    <img src="1.jpeg" alt="Miss" class="real-photo" />
+                  </div>
+                  <div class="polaroid-caption">always glowing ✨</div>
+                </div>
+                <div class="polaroid-back">
+                  <p class="polaroid-secret">"may ur day be as bright as this smile 🌟"</p>
+                  <span class="cute-tag">#SpecialDay</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Polaroid 2 - ran out of photos -->
+            <div class="polaroid-card p2" tabindex="0" role="button" aria-label="Photo memory 2">
+              <div class="polaroid-pin">🌸</div>
+              <div class="polaroid-inner">
+                <div class="polaroid-front">
+                  <div class="photo-frame cute-gradient-2 ran-out-frame">
+                    <div class="ran-out-content">
+                      <span class="ran-out-emoji">📸</span>
+                      <p class="ran-out-text">i ran out of ur photos 🙃</p>
+                    </div>
+                  </div>
+                  <div class="polaroid-caption">help i need more pics 😭</div>
+                </div>
+                <div class="polaroid-back">
+                  <p class="polaroid-secret">"send more pics next time so i can do this properly 😤"</p>
+                  <span class="cute-tag">#NoMorePhotos</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Polaroid 3 - real photo -->
+            <div class="polaroid-card p3" tabindex="0" role="button" aria-label="Photo memory 3">
+              <div class="polaroid-pin">🎀</div>
+              <div class="polaroid-inner">
+                <div class="polaroid-front">
+                  <div class="photo-frame photo-real">
+                    <img src="3.jpeg" alt="Miss" class="real-photo" />
+                  </div>
+                  <div class="polaroid-caption">iconic fr 👑</div>
+                </div>
+                <div class="polaroid-back">
+                  <p class="polaroid-secret">"here's to another year of being absolutely that girl 💅"</p>
+                  <span class="cute-tag">#ThatGirl</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="next-activity-bar">
+          <button id="go-to-end-btn" class="cute-cta-btn">
+            <span>that's it from me 🎉</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SCENE 3.5: Conversation Mode -->
+    <section id="scene-convo" class="scene">
+      <div class="glass-card convo-card">
+        <div class="pill-chip">ok so... 💬</div>
+
+        <div class="convo-bubbles" id="convo-bubbles">
+          <!-- Bubbles render via JS -->
+        </div>
+
+        <!-- Final convo CTA shown after all messages -->
+        <div class="convo-cta" id="convo-cta" style="display:none;">
+          <p class="convo-cta-label">so... shall we? 🎂</p>
+          <div class="choice-buttons-group">
+            <button id="convo-oky-btn" class="cute-cta-btn pulse-glow">oky 🎂</button>
+            <button id="convo-no-btn" class="cute-secondary-btn no-btn" style="position:relative;">no 🙄</button>
+          </div>
+          <p id="convo-no-msg" class="convo-no-msg"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCENE 4: Final Replay -->
+    <section id="scene-end" class="scene">
+      <div class="glass-card">
+        <div class="cute-big-emoji">🎉🥳🎊</div>
+        <h2 class="scene-heading">Happy Birthday, Miss! 🎂</h2>
+        <p class="scene-sub">hope this was worth the code lol 😌<br>wishing u all the best things in this world fr 💖</p>
+        <div class="action-buttons-group" style="margin-top:24px;">
+          <button id="celebrate-again-btn" class="cute-cta-btn">🔄 Start Over</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
