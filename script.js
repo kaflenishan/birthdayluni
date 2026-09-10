@@ -1,7 +1,7 @@
 /**
  * Cute Interactive Birthday Website Logic for Miss Lunibha
  * - Passcode Lock (112009)
- * - Playful "I have something to sayyyy" & "Really?" Dialogues
+ * - Playful "Are U really Here ?" & "Really?" Dialogues
  * - Conversation Mode: "17 years damnnn..." with typed bubble flow
  * - Jumping "No" Button
  * - Interactive Candle Blowout & Confetti
@@ -20,10 +20,63 @@ document.addEventListener('DOMContentLoaded', () => {
   const state = {
     activeScene: 'scene-passcode',
     candlesLit: 3,
+    canBlowCandles: false,
     musicPlaying: false,
     noClickCount: 0,
     convoNoCount: 0
   };
+
+  // ==========================================
+  // 1b. COUNTDOWN TIMER TO MIDNIGHT
+  // ==========================================
+  const countdownWrap = document.getElementById('countdown-wrap');
+  const codeReveal = document.getElementById('code-reveal');
+  const cdHours = document.getElementById('cd-hours');
+  const cdMins = document.getElementById('cd-mins');
+  const cdSecs = document.getElementById('cd-secs');
+
+  function getMidnightTonight() {
+    const now = new Date();
+    const midnight = new Date(now);
+    midnight.setHours(24, 0, 0, 0);
+    return midnight;
+  }
+
+  function updateCountdown() {
+    const now = new Date();
+    const midnight = getMidnightTonight();
+    const diff = midnight - now;
+
+    if (diff <= 0) {
+      // It's midnight! Reveal the code
+      if (countdownWrap) countdownWrap.style.display = 'none';
+      if (codeReveal) codeReveal.style.display = 'block';
+      return false;
+    }
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+    if (cdHours) cdHours.textContent = String(hours).padStart(2, '0');
+    if (cdMins) cdMins.textContent = String(mins).padStart(2, '0');
+    if (cdSecs) cdSecs.textContent = String(secs).padStart(2, '0');
+
+    return true;
+  }
+
+  // Check if it's already past midnight
+  const now = new Date();
+  const midnight = getMidnightTonight();
+  if (midnight - now <= 0) {
+    // Already past midnight, show code immediately
+    if (countdownWrap) countdownWrap.style.display = 'none';
+    if (codeReveal) codeReveal.style.display = 'block';
+  } else {
+    // Start countdown
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  }
 
   // DOM Elements
   const confettiCanvas = document.getElementById('confetti-canvas');
@@ -36,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const passcodeError = document.getElementById('passcode-error');
   const keyBtns = document.querySelectorAll('.key-btn[data-key]');
   const keyClear = document.getElementById('key-clear');
-  const keyEnter = document.getElementById('key-enter');
+  const keyBackspace = document.getElementById('key-backspace');
   const passcodeCard = document.querySelector('.passcode-card');
 
   // Question Elements
@@ -54,10 +107,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Cake Elements
   const giftBox = document.getElementById('gift-box');
+  const cakeStage = document.getElementById('cake-stage');
   const candles = document.querySelectorAll('.candle');
-  const blowCandlesBtn = document.getElementById('blow-candles-btn');
   const wishStatusMsg = document.getElementById('wish-status-msg');
-  const skipToCardBtn = document.getElementById('skip-to-card-btn');
   const polaroidCards = document.querySelectorAll('.polaroid-card');
   const celebrateAgainBtn = document.getElementById('celebrate-again-btn');
 
@@ -263,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
       gain.connect(audioCtx.destination);
       osc.start();
       osc.stop(audioCtx.currentTime + 0.2);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   function playBlowSound() {
@@ -344,6 +396,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sceneId === 'scene-cake') {
       buildCake();
     }
+    if (sceneId === 'scene-scrapbook') {
+      const sbBook = document.getElementById('scrapbook-book');
+      const sbHint = document.getElementById('scrapbook-status-hint');
+      if (sbBook) sbBook.classList.remove('book-opened');
+      if (sbHint) sbHint.textContent = 'Tap the scrapbook to open it!';
+    }
   }
 
   // ==========================================
@@ -351,18 +409,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   function buildCake() {
     // Grab elements
-    const tierBottom  = document.querySelector('.tier-bottom');
-    const tierTop     = document.querySelector('.tier-top');
+    const tierBottom = document.querySelector('.tier-bottom');
+    const tierTop = document.querySelector('.tier-top');
     const decorations = document.querySelector('.cake-decorations');
-    const cakePlate   = document.querySelector('.cake-plate');
-    const candleEls   = document.querySelectorAll('.candle');
-    const flameEls    = document.querySelectorAll('.candle .flame');
+    const cakePlate = document.querySelector('.cake-plate');
+    const candleEls = document.querySelectorAll('.candle');
+    const flameEls = document.querySelectorAll('.candle .flame');
 
     // Reset everything to hidden up in the sky
-    tierBottom.className  = 'cake-tier tier-bottom tier-hidden';
-    tierTop.className     = 'cake-tier tier-top tier-hidden';
+    tierBottom.className = 'cake-tier tier-bottom tier-hidden';
+    tierTop.className = 'cake-tier tier-top tier-hidden';
     decorations.className = 'cake-decorations deco-hidden';
-    cakePlate.className   = 'cake-plate plate-hidden';
+    cakePlate.className = 'cake-plate plate-hidden';
     candleEls.forEach((c, idx) => {
       c.className = `candle candle-hidden${idx === 1 ? ' center-candle' : ''}`;
     });
@@ -372,24 +430,22 @@ document.addEventListener('DOMContentLoaded', () => {
       f.classList.remove('flame-ignite');
     });
 
-    // Reset blow button
-    blowCandlesBtn.classList.add('btn-locked');
-    blowCandlesBtn.style.display = 'inline-flex';
-    blowCandlesBtn.innerHTML = '<span class="btn-emoji">💨</span><span>Blow Candles!</span>';
+    // Reset state
     state.candlesLit = 3;
+    state.canBlowCandles = false;
     wishStatusMsg.textContent = 'watch your cake fall from the sky... 🎂✨';
 
     // Sequence timing: each part drops 1 by 1, squishes upon landing
     const T = {
-      plate:  300,   // plate falls from sky, lands & squishes
+      plate: 300,   // plate falls from sky, lands & squishes
       bottom: 1050,  // bottom tier falls, squishes onto plate
-      top:    1800,  // top tier falls, squishes onto bottom tier
-      decos:  2550,  // toppings fall, squish
-      c1:     3200,  // candle 1 drops from sky
-      c2:     3750,  // candle 2 drops from sky
-      c3:     4300,  // candle 3 drops from sky
+      top: 1800,  // top tier falls, squishes onto bottom tier
+      decos: 2550,  // toppings fall, squish
+      c1: 3200,  // candle 1 drops from sky
+      c2: 3750,  // candle 2 drops from sky
+      c3: 4300,  // candle 3 drops from sky
       flames: 4900,  // flames ignite
-      unlock: 5300   // blow button unlocks!
+      unlock: 5300   // tapping candles unlocks!
     };
 
     function animIn(el, removeClass, addClass) {
@@ -444,10 +500,10 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => playMagicChimeSound(), 420);
     }, T.flames);
 
-    // 7. Blow button unlocks!
+    // 7. Direct candle tap unlocks!
     setTimeout(() => {
-      blowCandlesBtn.classList.remove('btn-locked');
-      wishStatusMsg.textContent = 'Make a wish, then tap a candle or blow! 🕯️✨';
+      state.canBlowCandles = true;
+      wishStatusMsg.textContent = 'Make a wish, then tap the candles to blow them out! 🕯️✨';
     }, T.unlock);
   }
 
@@ -476,9 +532,15 @@ document.addEventListener('DOMContentLoaded', () => {
     updatePasscodeDisplay();
   });
 
-  keyEnter.addEventListener('click', () => {
-    if (enteredCode.length > 0) validatePasscode();
-  });
+  if (keyBackspace) {
+    keyBackspace.addEventListener('click', () => {
+      if (enteredCode.length > 0) {
+        enteredCode = enteredCode.slice(0, -1);
+        playKeyClickSound();
+        updatePasscodeDisplay();
+      }
+    });
+  }
 
   function validatePasscode() {
     if (enteredCode === SECRET_CODE) {
@@ -526,9 +588,8 @@ document.addEventListener('DOMContentLoaded', () => {
   q2YesBtn.addEventListener('click', () => {
     initAudio();
     playMagicChimeSound();
-    // → Conversation mode directly (no gift unwrapping)
-    switchScene('scene-convo');
-    startConversation();
+    // Go to flower question first
+    switchScene('scene-flower');
   });
 
   q2NoBtn.addEventListener('click', () => triggerAttitudeScreen());
@@ -537,18 +598,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // 8. CONVERSATION MODE (Chat Bubbles)
   // ==========================================
   const convoMessages = [
-    { text: 'Damn, 17 😯', type: 'bubble-accent', delay: 900 },
-    { text: 'holy cow 🐄', type: 'bubble-them', delay: 1100 },
+    { text: 'Holy cow, 17 😯', type: 'bubble-accent', delay: 1000 },
+    { text: 'Damnnnnnn', type: 'bubble-them', delay: 1050 },
     { text: "well... i met u like a year ago and u were 16", type: 'bubble-them', delay: 1600 },
-    { text: "how did u even become 17 bro", type: 'bubble-them', delay: 1400 },
-    { text: "did someone permit u to grow up that fast 😦", type: 'bubble-them', delay: 1500 },
+    { text: "how did u even become 17 dude", type: 'bubble-them', delay: 1400 },
+    { text: "U Know Some magic or whatt🤣", type: 'bubble-them', delay: 1500 },
     { text: "jokes aside tho", type: 'bubble-accent', delay: 1600 },
-    { text: "17 damn it sounds serious", type: 'bubble-them', delay: 1200 },
-    { text: "unlike your height 🤣", type: 'bubble-accent', delay: 900 },
+    { text: "17 damn Dosent it sounds serious?", type: 'bubble-them', delay: 1200 },
+    { text: "unlike your height ofcource 🤣", type: 'bubble-accent', delay: 900 },
     { text: "uff ok ok seriously now", type: 'bubble-them', delay: 1800 },
-    { text: "lets blow a candle virtually 🎂", type: 'bubble-big', delay: 1400 },
-    { text: "sorry i couldn't give u a real gift or a cake 😔", type: 'bubble-them', delay: 1600 },
-    { text: "but still... u will blow right? 😌", type: 'bubble-accent', delay: 1400 },
+    { text: "sorry couldnt give u a real cake😔,", type: 'bubble-big', delay: 1400 },
+    { text: "But i am not getting chocolet too uk😤", type: 'bubble-them', delay: 1600 },
+    { text: "Well umm U Didnt ask for this but still... Did what i could Okay? 😌", type: 'bubble-accent', delay: 1400 },
   ];
 
   let convoStep = 0;
@@ -618,7 +679,7 @@ document.addEventListener('DOMContentLoaded', () => {
       "ok ur actually trolling me 😤",
       "STOP PRESSING NO 💀",
       "fr fr just click oky already 😭",
-      "u are so mean rn omg",
+      "what a meenie 😭",
       "idc im taking u there anyway 😤"
     ];
 
@@ -706,41 +767,59 @@ document.addEventListener('DOMContentLoaded', () => {
   candles.forEach(candle => {
     candle.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (blowCandlesBtn.classList.contains('btn-locked')) return;
+      if (!state.canBlowCandles) return;
       extinguishCandle(candle);
     });
   });
 
-  blowCandlesBtn.addEventListener('click', () => {
-    if (blowCandlesBtn.classList.contains('btn-locked')) return;
-    initAudio();
-    blowCandlesBtn.classList.add('btn-locked');
-    blowCandlesBtn.innerHTML = '<span class="btn-emoji">💨</span><span>Blowing... ✨</span>';
-
-    candles.forEach((c, idx) => {
-      setTimeout(() => extinguishCandle(c), idx * 200);
+  if (cakeStage) {
+    cakeStage.addEventListener('click', () => {
+      if (!state.canBlowCandles || state.candlesLit <= 0) return;
+      const activeCandle = Array.from(candles).find(c => !c.classList.contains('blown-out') && !c.classList.contains('candle-hidden'));
+      if (activeCandle) extinguishCandle(activeCandle);
     });
-  });
+  }
 
   function triggerWishCompleted() {
-    wishStatusMsg.innerHTML = '🎉 <strong>wish made! may it all come true, Miss 💖</strong>';
-    blowCandlesBtn.style.display = 'none';
-    skipToCardBtn.classList.add('pulse-glow');
+    wishStatusMsg.innerHTML = '🎉 <strong>wish made! opening your surprise scrapbook... 💖</strong>';
 
     launchConfetti(120);
     setTimeout(() => launchConfetti(80, window.innerWidth * 0.25), 300);
     setTimeout(() => launchConfetti(80, window.innerWidth * 0.75), 600);
 
-    setTimeout(() => switchScene('scene-wishes'), 2200);
+    // Wait 2.5 seconds after candle blowout before transitioning directly into scrapbook
+    setTimeout(() => switchScene('scene-scrapbook'), 2500);
   }
 
-  skipToCardBtn.addEventListener('click', () => switchScene('scene-wishes'));
+  // ==========================================
+  // 10b. SCENE 2.5: 3D PAPERCRAFT SCRAPBOOK (Letter & Polaroids Together!)
+  // ==========================================
+  const scrapbookBook = document.getElementById('scrapbook-book');
+  const scrapbookHint = document.getElementById('scrapbook-status-hint');
 
-  const goToEndBtn = document.getElementById('go-to-end-btn');
-  if (goToEndBtn) {
-    goToEndBtn.addEventListener('click', () => {
-      launchConfetti(70);
+  if (scrapbookBook) {
+    scrapbookBook.addEventListener('click', () => {
+      if (!scrapbookBook.classList.contains('book-opened')) {
+        scrapbookBook.classList.add('book-opened');
+        initAudio();
+        playMagicChimeSound();
+        launchConfetti(90);
+        setTimeout(() => launchConfetti(70, window.innerWidth * 0.3), 300);
+        setTimeout(() => launchConfetti(70, window.innerWidth * 0.7), 600);
+
+        if (scrapbookHint) {
+          scrapbookHint.innerHTML = 'Tada! Handmade with all my heart for your 17th';
+        }
+      }
+    });
+  }
+
+  const scrapbookDoneBtn = document.getElementById('scrapbook-done-btn');
+  if (scrapbookDoneBtn) {
+    scrapbookDoneBtn.addEventListener('click', () => {
+      initAudio();
       playMagicChimeSound();
+      launchConfetti(70);
       switchScene('scene-end');
     });
   }
@@ -749,21 +828,75 @@ document.addEventListener('DOMContentLoaded', () => {
   // 11. POLAROID FLIP INTERACTION
   // ==========================================
   polaroidCards.forEach(card => {
-    card.addEventListener('click', () => {
+    card.addEventListener('click', (e) => {
+      e.stopPropagation();
       card.classList.toggle('flipped');
       playMagicChimeSound();
     });
   });
 
   // ==========================================
-  // 12. REPLAY / CELEBRATE AGAIN
+  // 12. FLOWER QUESTION LOGIC
+  // ==========================================
+  const flowerInputScene = document.getElementById('flower-input-scene');
+  const flowerSubmitScene = document.getElementById('flower-submit-scene');
+  const flowerResponseScene = document.getElementById('flower-response-scene');
+
+  function checkFlowerAnswerScene() {
+    if (!flowerInputScene || !flowerResponseScene) return;
+    const answer = flowerInputScene.value.toLowerCase().replace(/[\s\-_.,!?]/g, '').trim();
+    
+    // Accept any variation of "white tulip" or just "tulip"
+    const validAnswers = [
+      'whitetulip', 'tulip', 'whitetulips', 'tulips',
+      'white tulip', 'white tulips',
+      'wt', 'whtulip', 'whitetlp'
+    ];
+    
+    const isCorrect = validAnswers.some(v => answer.includes(v)) || 
+                      answer.includes('tulip');
+    
+    if (isCorrect) {
+      flowerResponseScene.textContent = 'its white tulip :) 🌷';
+      flowerResponseScene.className = 'flower-response';
+      flowerInputScene.disabled = true;
+      flowerSubmitScene.disabled = true;
+      flowerInputScene.style.borderColor = '#16a34a';
+      playMagicChimeSound();
+      launchConfetti(50);
+      
+      // After correct answer, start conversation
+      setTimeout(() => {
+        switchScene('scene-convo');
+        startConversation();
+      }, 1500);
+    } else if (answer.length > 0) {
+      flowerResponseScene.textContent = 'nope, think again 🤔';
+      flowerResponseScene.className = 'flower-response wrong';
+      flowerInputScene.value = '';
+    }
+  }
+
+  if (flowerSubmitScene) {
+    flowerSubmitScene.addEventListener('click', checkFlowerAnswerScene);
+  }
+  if (flowerInputScene) {
+    flowerInputScene.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') checkFlowerAnswerScene();
+    });
+  }
+
+  // ==========================================
+  // 13. REPLAY / CELEBRATE AGAIN
   // ==========================================
   if (celebrateAgainBtn) {
     celebrateAgainBtn.addEventListener('click', () => {
       // Reset state (cake resets automatically when scene-cake is entered via buildCake)
       state.candlesLit = 3;
-      skipToCardBtn.classList.remove('pulse-glow');
-      wishStatusMsg.textContent = 'Tap the flame or press the button above!';
+      state.canBlowCandles = false;
+      wishStatusMsg.textContent = 'Make a wish, then tap the candles to blow them out! 🕯️✨';
+      if (scrapbookBook) scrapbookBook.classList.remove('book-opened');
+      if (scrapbookHint) scrapbookHint.textContent = 'Tap the scrapbook to open it! 🎁';
       enteredCode = '';
       updatePasscodeDisplay();
       switchScene('scene-passcode');

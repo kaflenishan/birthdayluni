@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Happy Birthday Miss Lunibha! ✨🎂</title>
-  <meta name="description" content="A cute, interactive, and personalized birthday celebration website for Miss Lunibha!">
+  <title>Happy Birthday Lunibha! ✨🎂</title>
+  <meta name="description"
+    content="A cute, interactive, and personalized birthday celebration website for Miss Lunibha!">
   <!-- Google Fonts: Fredoka & Caveat & Quicksand -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=3.0">
 </head>
+
 <body>
   <!-- Fullscreen Particle / Confetti Canvas -->
   <canvas id="confetti-canvas"></canvas>
@@ -35,12 +40,32 @@
     <!-- SCENE 0: Cute Passcode Lock Panel (Code: 112009) -->
     <section id="scene-passcode" class="scene active">
       <div class="glass-card passcode-card">
-        <div class="pill-chip">🔒 Secret Birthday Access</div>
-        <h1 class="bounce-title">Enter Secret Code ✨</h1>
+        <div class="pill-chip">Secret Birthday Access</div>
+        <h1 class="bounce-title">Enter Secret Code</h1>
         <p class="subtitle">Only Miss Lunibha has the magical birthday key!</p>
 
+        <!-- Countdown Timer -->
+        <div class="countdown-wrap" id="countdown-wrap">
+          <p class="countdown-label">code unlocks in...</p>
+          <div class="countdown-timer" id="countdown-timer">
+            <div class="cd-block"><span class="cd-num" id="cd-hours">00</span><span class="cd-tag">hrs</span></div>
+            <div class="cd-sep">:</div>
+            <div class="cd-block"><span class="cd-num" id="cd-mins">00</span><span class="cd-tag">min</span></div>
+            <div class="cd-sep">:</div>
+            <div class="cd-block"><span class="cd-num" id="cd-secs">00</span><span class="cd-tag">sec</span></div>
+          </div>
+        </div>
+
+        <!-- Passcode Revealed -->
+        <div class="code-reveal" id="code-reveal" style="display:none;">
+          <p class="reveal-text">here's your code...</p>
+          <div class="reveal-code">112009</div>
+          <p class="reveal-sub">now type it in below!</p>
+        </div>
+
         <div class="code-display-wrap">
-          <input type="password" id="passcode-input" class="passcode-input" maxlength="6" readonly placeholder="• • • • • •" />
+          <input type="password" id="passcode-input" class="passcode-input" maxlength="6" readonly
+            placeholder="• • • • • •" />
           <p id="passcode-error" class="error-text"></p>
         </div>
 
@@ -57,18 +82,17 @@
           <button type="button" class="key-btn" data-key="9">9</button>
           <button type="button" class="key-btn clear-btn" id="key-clear">C</button>
           <button type="button" class="key-btn" data-key="0">0</button>
-          <button type="button" class="key-btn enter-btn" id="key-enter">💖</button>
+          <button type="button" class="key-btn backspace-btn" id="key-backspace">⌫</button>
         </div>
       </div>
     </section>
 
-    <!-- SCENE 0.5: Playful Question 1 (I have something to sayyyy) -->
+    <!-- SCENE 0.5: Playful Question 1 (Are U really Here ?) -->
     <section id="scene-q1" class="scene">
       <div class="glass-card question-card">
         <div class="pill-chip">Surprise Alert 👀</div>
         <div class="cute-big-emoji">🎁✨</div>
-        <h2 class="scene-heading">i have something... to sayyyy</h2>
-        <p class="scene-sub">Pick wisely, Miss! 🤭</p>
+        <h2 class="scene-heading">Are U really Here ?</h2>
 
         <div class="choice-buttons-group">
           <button id="q1-yes-btn" class="cute-cta-btn pulse-glow">
@@ -97,6 +121,23 @@
             <span>No 😝</span>
           </button>
         </div>
+      </div>
+    </section>
+
+    <!-- SCENE 0.8: Flower Question -->
+    <section id="scene-flower" class="scene">
+      <div class="glass-card flower-card">
+        <div class="pill-chip">quick question ✨</div>
+        <div class="cute-big-emoji">💌</div>
+        <h2 class="scene-heading">whats my fav flower?</h2>
+        <p class="scene-sub">Want Hints? naaa u have to know 👀</p>
+
+        <div class="flower-input-wrap" style="justify-content: center; margin-top: 10px;">
+          <input type="text" id="flower-input-scene" class="flower-input" placeholder="type here..."
+            autocomplete="off" />
+          <button id="flower-submit-scene" class="flower-submit-btn">--> </button>
+        </div>
+        <p id="flower-response-scene" class="flower-response"></p>
       </div>
     </section>
 
@@ -204,120 +245,172 @@
           </div>
         </div>
 
-        <div class="action-buttons-group">
-          <button id="blow-candles-btn" class="cute-cta-btn pulse-glow btn-locked">
-            <span class="btn-emoji">💨</span>
-            <span>Blow Candles!</span>
-          </button>
-          <button id="skip-to-card-btn" class="cute-secondary-btn">
-            Read Your Birthday Card 💌
-          </button>
-        </div>
-
-        <p class="wish-status" id="wish-status-msg">Tap the flame or press the button above!</p>
+        <p class="wish-status" id="wish-status-msg">watch your cake fall from the sky... 🎂✨</p>
       </div>
     </section>
 
-    <!-- SCENE 3: The Greeting Letter & Polaroid Memory Wall -->
-    <section id="scene-wishes" class="scene">
-      <div class="wishes-layout">
-        
-        <!-- Folded Romantic/Cute Letter Card -->
-        <div class="letter-card-wrapper">
-          <div class="letter-envelope" id="letter-card">
-            <div class="letter-header">
-              <div class="stamp-box">
-                <span class="stamp-icon">💌</span>
-                <span class="stamp-text">FOR YOU</span>
-              </div>
-              <div class="to-label">Dearest cool Birthday Girl,</div>
-            </div>
+    <!-- SCENE 2.5: Interactive 3D Papercraft Scrapbook (Letter & Polaroids Together!) -->
+    <section id="scene-scrapbook" class="scene">
+      <div class="glass-card scrapbook-card-wrap">
+        <div class="pill-chip">Handmade with Heart 💖</div>
+        <h2 class="scene-heading">Specially For You ✨</h2>
+        <p class="scene-sub scrapbook-hint" id="scrapbook-status-hint">Tap the scrapbook to open it! 🎁</p>
 
-            <div class="letter-body">
-              <p class="letter-text" id="display-letter">
-                Wishing you the sweetest, brightest, and most magical birthday ever! May your year ahead be packed with endless smiles, pure happiness, warm moments, and every dream in your heart coming true. Thank you for being such a wonderful, radiant presence in the world! 🌸✨
-              </p>
-              <div class="signature-line">
-                <p>penned down by,</p>
-                <h4 id="display-sender" class="sender-name">someone who remembers 💭</h4>
-              </div>
-            </div>
+        <!-- 3D Scrapbook Stage -->
+        <div class="scrapbook-stage-viewport">
+          <div class="scrapbook-book" id="scrapbook-book" role="button" tabindex="0"
+            aria-label="Open Birthday Scrapbook">
 
-            <div class="card-stickers">
-              <span class="sticker s-heart">💖</span>
-              <span class="sticker s-sparkle">✨</span>
-              <span class="sticker s-cupcake">🧁</span>
-            </div>
-          </div>
-        </div>
+            <!-- Book Spine / Wire Binding -->
+            <div class="book-spine"></div>
 
-        <!-- Polaroid Memories Gallery -->
-        <div class="polaroid-section">
-          <h3 class="polaroid-title">Sweet Moments & Memories 📸</h3>
-          <p class="polaroid-sub">Tap any photo to flip and reveal secret notes!</p>
-          
-          <div class="polaroid-deck" id="polaroid-deck">
-            <!-- Polaroid 1 - real photo -->
-            <div class="polaroid-card p1" tabindex="0" role="button" aria-label="Photo memory 1">
-              <div class="polaroid-pin">📌</div>
-              <div class="polaroid-inner">
-                <div class="polaroid-front">
-                  <div class="photo-frame photo-real">
-                    <img src="1.jpeg" alt="Miss" class="real-photo" />
+            <!-- Left Kraft Cover (Swings open in 3D) -->
+            <div class="book-cover-left" id="book-cover-left">
+              <div class="cover-kraft-front">
+                <!-- Mini Bunting Flags: H A P P Y  B I R T H D A Y -->
+                <div class="cover-bunting">
+                  <span class="bunt-flag bunt-yellow">H</span>
+                  <span class="bunt-flag bunt-pink">A</span>
+                  <span class="bunt-flag bunt-purple">P</span>
+                  <span class="bunt-flag bunt-pink">P</span>
+                  <span class="bunt-flag bunt-yellow">Y</span>
+                  <span class="bunt-flag bunt-purple">B</span>
+                  <span class="bunt-flag bunt-pink">I</span>
+                  <span class="bunt-flag bunt-yellow">R</span>
+                  <span class="bunt-flag bunt-purple">T</span>
+                  <span class="bunt-flag bunt-pink">H</span>
+                  <span class="bunt-flag bunt-yellow">D</span>
+                  <span class="bunt-flag bunt-purple">A</span>
+                  <span class="bunt-flag bunt-pink">Y</span>
+                </div>
+
+                <!-- Circular Cutout Window Previewing Center Badge -->
+                <div class="cover-circular-window">
+                  <div class="window-preview-badge">
+                    <span class="p-title">Happy Birthday!</span>
+                    <span class="p-sub">Lunibha ✨</span>
                   </div>
-                  <div class="polaroid-caption">always glowing ✨</div>
+                  <div class="window-rim-shadow"></div>
                 </div>
-                <div class="polaroid-back">
-                  <p class="polaroid-secret">"may ur day be as bright as this smile 🌟"</p>
-                  <span class="cute-tag">#SpecialDay</span>
+
+                <!-- Cute Kraft Cover Stickers (like the video) -->
+                <div class="cover-deco-stickers">
+                  <span class="c-sticker sticker-cupcake">🧁</span>
+                  <span class="c-sticker sticker-balloon">🎈</span>
+                  <span class="c-sticker sticker-camera">📸</span>
+                  <span class="c-sticker sticker-flower">🌸</span>
+                  <span class="c-sticker sticker-star">⭐</span>
+                  <span class="c-sticker sticker-cake">🎂</span>
+                </div>
+
+                <!-- Tap Prompt -->
+                <div class="cover-tap-prompt">
+                  <span>✨ Tap to open ✨</span>
                 </div>
               </div>
             </div>
 
-            <!-- Polaroid 2 - ran out of photos -->
-            <div class="polaroid-card p2" tabindex="0" role="button" aria-label="Photo memory 2">
-              <div class="polaroid-pin">🌸</div>
-              <div class="polaroid-inner">
-                <div class="polaroid-front">
-                  <div class="photo-frame cute-gradient-2 ran-out-frame">
-                    <div class="ran-out-content">
-                      <span class="ran-out-emoji">📸</span>
-                      <p class="ran-out-text">i ran out of ur photos 🙃</p>
+            <!-- Inside Spread -->
+            <div class="book-inside-spread" id="book-inside-spread">
+
+              <!-- Letter + Polaroids -->
+              <div class="scrapbook-page page-letter-photos" id="page-letter-photos">
+                <div class="letter-side">
+                  <div class="craft-washi-tape tape-left"></div>
+                  <div class="craft-washi-tape tape-right"></div>
+                  <div class="letter-inner-card">
+                    <div class="letter-header">
+                      <div class="stamp-box">
+                        <span class="stamp-icon">💌</span>
+                        <span class="stamp-text">FOR YOU</span>
+                      </div>
+                      <div class="to-label">Dearest cool Birthday Girl,</div>
+                    </div>
+                    <div class="letter-body">
+                      <p class="letter-text" id="display-letter">
+                        i met u like a year ago and honestly ur one of the coolest person ever.
+                        u dont even try and still manage to make everyone smile 💖
+                      </p>
+                      <p class="letter-text" style="margin-top: 10px;">
+                        so yeah happy 17th i guess 🎂✨
+                        hope this year treats u way better than u think u deserve (which is a lot btw)
+                      </p>
+                      <div class="signature-line">
+                        <p>penned down by,</p>
+                        <h4 id="display-sender" class="sender-name">someone who remembers 💭</h4>
+                      </div>
+                    </div>
+                    <div class="card-stickers">
+                      <span class="sticker s-heart">💖</span>
+                      <span class="sticker s-sparkle">✨</span>
+                      <span class="sticker s-cupcake">🧁</span>
                     </div>
                   </div>
-                  <div class="polaroid-caption">help i need more pics 😭</div>
                 </div>
-                <div class="polaroid-back">
-                  <p class="polaroid-secret">"send more pics next time so i can do this properly 😤"</p>
-                  <span class="cute-tag">#NoMorePhotos</span>
+
+                <div class="book-center-spine"></div>
+
+                <div class="photos-side">
+                  <div class="polaroid-header">
+                    <h3 class="polaroid-title">Sweet Moments 📸</h3>
+                    <p class="polaroid-sub">Tap any photo to flip!</p>
+                  </div>
+                  <div class="polaroid-deck" id="polaroid-deck">
+                    <div class="polaroid-card p1" tabindex="0" role="button" aria-label="Photo 1">
+                      <div class="polaroid-pin">📌</div>
+                      <div class="polaroid-inner">
+                        <div class="polaroid-front">
+                          <div class="photo-frame photo-real">
+                            <img src="1.jpeg" alt="Photo" class="real-photo" />
+                          </div>
+                          <div class="polaroid-caption">always glowing ✨</div>
+                        </div>
+                        <div class="polaroid-back">
+                          <p class="polaroid-secret">"may ur day be as bright as this smile 🌟"</p>
+                          <span class="cute-tag">#SpecialDay</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="polaroid-card p2" tabindex="0" role="button" aria-label="Photo 2">
+                      <div class="polaroid-pin">🌸</div>
+                      <div class="polaroid-inner">
+                        <div class="polaroid-front">
+                          <div class="photo-frame photo-real">
+                            <img src="2.jpg" alt="Cute Bunny" class="real-photo" />
+                          </div>
+                          <div class="polaroid-caption">thats u u cant argue 🐰💛</div>
+                        </div>
+                        <div class="polaroid-back">
+                          <p class="polaroid-secret">"literally u fr, no arguments allowed 😌🎀"</p>
+                          <span class="cute-tag">#ThatsLiterallyU</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="polaroid-card p3" tabindex="0" role="button" aria-label="Photo 3">
+                      <div class="polaroid-pin">🎀</div>
+                      <div class="polaroid-inner">
+                        <div class="polaroid-front">
+                          <div class="photo-frame photo-real">
+                            <img src="3.jpeg" alt="Photo" class="real-photo" />
+                          </div>
+                          <div class="polaroid-caption">iconic fr 👑</div>
+                        </div>
+                        <div class="polaroid-back">
+                          <p class="polaroid-secret">"here's to another year of being an absolute cool girl 😎💖"</p>
+                          <span class="cute-tag">#CoolGirl</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
+
             </div>
 
-            <!-- Polaroid 3 - real photo -->
-            <div class="polaroid-card p3" tabindex="0" role="button" aria-label="Photo memory 3">
-              <div class="polaroid-pin">🎀</div>
-              <div class="polaroid-inner">
-                <div class="polaroid-front">
-                  <div class="photo-frame photo-real">
-                    <img src="3.jpeg" alt="Miss" class="real-photo" />
-                  </div>
-                  <div class="polaroid-caption">iconic fr 👑</div>
-                </div>
-                <div class="polaroid-back">
-                  <p class="polaroid-secret">"here's to another year of being absolutely that girl 💅"</p>
-                  <span class="cute-tag">#ThatGirl</span>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
-        <div class="next-activity-bar">
-          <button id="go-to-end-btn" class="cute-cta-btn">
-            <span>that's it from me 🎉</span>
-          </button>
-        </div>
+        <button id="scrapbook-done-btn" class="scrapbook-done-btn">that's it from me --></button>
 
       </div>
     </section>
@@ -348,7 +441,8 @@
       <div class="glass-card">
         <div class="cute-big-emoji">🎉🥳🎊</div>
         <h2 class="scene-heading">Happy Birthday, Miss! 🎂</h2>
-        <p class="scene-sub">hope this was worth the code lol 😌<br>wishing u all the best things in this world fr 💖</p>
+        <p class="scene-sub">hope this was worth the code lol 😌<br>wishing u all the best things in this world fr 💖
+        </p>
         <div class="action-buttons-group" style="margin-top:24px;">
           <button id="celebrate-again-btn" class="cute-cta-btn">🔄 Start Over</button>
         </div>
@@ -359,4 +453,5 @@
 
   <script src="script.js"></script>
 </body>
+
 </html>
