@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getMidnightTonight() {
     const now = new Date();
-    // Use UTC to avoid timezone issues on GitHub Pages
-    const midnight = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0));
+    const midnight = new Date(now);
+    midnight.setHours(24, 0, 0, 0);
     return midnight;
   }
 
