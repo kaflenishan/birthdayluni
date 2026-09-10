@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getMidnightTonight() {
     const now = new Date();
-    const midnight = new Date(now);
-    midnight.setHours(24, 0, 0, 0);
+    // Use UTC to avoid timezone issues on GitHub Pages
+    const midnight = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0));
     return midnight;
   }
 
@@ -65,10 +65,10 @@ document.addEventListener('DOMContentLoaded', () => {
     return true;
   }
 
-  // Check if it's already past midnight
-  const now = new Date();
-  const midnight = getMidnightTonight();
-  if (midnight - now <= 0) {
+  // Check if it's already past midnight (using UTC)
+  const nowInit = new Date();
+  const midnightInit = getMidnightTonight();
+  if (midnightInit - nowInit <= 0) {
     // Already past midnight, show code immediately
     if (countdownWrap) countdownWrap.style.display = 'none';
     if (codeReveal) codeReveal.style.display = 'block';
